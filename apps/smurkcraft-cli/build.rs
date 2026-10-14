@@ -14,6 +14,7 @@ fn main() -> std::io::Result<()> {
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() != Ok("windows") {
         return Ok(());
     }
+    let icon_path = icon_path.to_string_lossy();
     let mut res = winresource::WindowsResource::new();
     // FileVersion / ProductVersion strings and the numeric FILEVERSION / PRODUCTVERSION are left
     // to `WindowsResource::new`, which reads the Cargo package version. A pre-release such as
