@@ -1,0 +1,114 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "apps/*", "xtask"]
+default-members = ["crates/*", "apps/smurkcraft", "apps/smurkcraft-cli", "xtask"]
+
+[workspace.package]
+version = "0.7.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+rust-version = "1.95"
+
+[workspace.dependencies]
+craft-ui = { git = "https://github.com/storytold/craft-libs", rev = "5c874d51eeb3de70e735c8ce87a59a7dedd47675", features = ["serde"] }
+# internal
+smurkcraft-geom = { path = "crates/geom" }
+smurkcraft-color = { path = "crates/color" }
+smurkcraft-cms = { path = "crates/cms" }
+smurkcraft-raster = { path = "crates/raster" }
+smurkcraft-doc = { path = "crates/doc" }
+smurkcraft-ops = { path = "crates/ops" }
+smurkcraft-psd = { path = "crates/psd" }
+smurkcraft-codecs = { path = "crates/codecs" }
+smurkcraft-raw = { path = "crates/raw" }
+smurkcraft-affinity = { path = "crates/affinity" }
+smurkcraft-compose = { path = "crates/compose" }
+smurkcraft-gpu = { path = "crates/gpu" }
+smurkcraft-paint = { path = "crates/paint" }
+smurkcraft-algo = { path = "crates/algo" }
+smurkcraft-io = { path = "crates/io" }
+smurkcraft-text = { path = "crates/text" }
+smurkcraft-vector = { path = "crates/vector" }
+smurkcraft-format = { path = "crates/format" }
+smurkcraft-automation = { path = "crates/automation" }
+smurkcraft-plugins = { path = "crates/plugins" }
+smurkcraft-engine = { path = "crates/engine" }
+smurkcraft-ui-egui = { path = "crates/ui-egui" }
+smurkcraft-testkit = { path = "crates/testkit" }
+smurkcraft-tablet = { path = "crates/tablet" }
+
+# external
+thiserror = "2"
+serde = { version = "1", features = ["derive", "rc"] }
+serde_json = "1"
+arc-swap = "1"
+bytemuck = { version = "1", features = ["derive"] }
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+image = { version = "0.25", default-features = false }
+# Baseline-JPEG decode of lossy DNG tiles (compression 34892), shared with zune-jpeg.
+zune-core = "0.5"
+zune-jpeg = "0.5"
+proptest = "1"
+eframe = { version = "0.36", default-features = false }
+egui = "0.36"
+egui_kittest = "0.36"
+rfd = "0.17"
+log = "0.4"
+rayon = "1"
+criterion = { version = "0.5", default-features = false }
+getrandom = "0.3"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.dev]
+opt-level = 1
+# Line tables keep file:line in panic backtraces but drop variable info, which roughly halves link
+# time and PDB size for the ~260 test binaries (#2204). CI sets the same through
+# CARGO_PROFILE_DEV_DEBUG. To inspect locals in a debugger, build with CARGO_PROFILE_DEV_DEBUG=true.
+debug = "line-tables-only"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+# The browser build (apps/smurkcraft-web, `data-cargo-profile` in its index.html). Hosts cap the
+# size of a single file (Cloudflare Pages/Workers: 25 MiB), and the wasm is downloaded on every
+# visit, so this profile optimizes for size: fat LTO, opt-level "z" for the UI shell, and "s" for
+# other crates except pixel processing, which keeps opt-level 3 for filters and compositing. panic
+# stays the target default (wasm32-unknown-unknown aborts; AGENTS.md's `panic = "unwind"` is for
+# the native app shell). packaging/web/package.sh fails the build above 24 MiB.
+[profile.wasm-release]
+inherits = "release"
+opt-level = "s"
+lto = "fat"
+codegen-units = 1
+strip = "debuginfo"
+
+[profile.wasm-release.package."*"]
+opt-level = "s"
+
+# Keep the browser shell compact as shared panel controls grow. Pixel-processing crates below
+# retain their speed-oriented optimization level.
+[profile.wasm-release.package.smurkcraft-ui-egui]
+opt-level = "z"
+
+[profile.wasm-release.package.smurkcraft-raster]
+opt-level = 3
+[profile.wasm-release.package.smurkcraft-color]
+opt-level = 3
+[profile.wasm-release.package.smurkcraft-cms]
+opt-level = 3
+[profile.wasm-release.package.smurkcraft-compose]
+opt-level = 3
+[profile.wasm-release.package.smurkcraft-algo]
+opt-level = 3
+[profile.wasm-release.package.smurkcraft-paint]
+opt-level = 3

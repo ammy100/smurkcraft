@@ -1,0 +1,17 @@
+[package]
+name = "smurkcraft-paint"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+smurkcraft-geom = { workspace = true }
+smurkcraft-color = { workspace = true }
+smurkcraft-raster = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

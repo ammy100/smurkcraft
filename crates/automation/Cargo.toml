@@ -1,0 +1,32 @@
+[package]
+name = "smurkcraft-automation"
+description = "MCP server (rmcp) over the Smurkcraft engine, plus a bridge to a running GUI"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+smurkcraft-geom = { workspace = true }
+smurkcraft-doc = { workspace = true }
+smurkcraft-compose = { workspace = true }
+smurkcraft-codecs = { workspace = true }
+smurkcraft-io = { workspace = true }
+smurkcraft-format = { path = "../format" }
+smurkcraft-engine = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+rmcp = { version = "3.5", default-features = false, features = ["server", "macros", "transport-io"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "io-std", "sync", "net", "io-util", "time"] }
+base64 = "0.22"
+schemars = "1"
+getrandom = { workspace = true }
+cap-std = "4"
+
+[dev-dependencies]
+rmcp = { version = "3.5", default-features = false, features = ["client", "server", "macros", "transport-io"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "io-std", "sync", "net", "io-util", "time"] }

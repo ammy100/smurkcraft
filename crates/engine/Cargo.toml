@@ -1,0 +1,48 @@
+[package]
+name = "smurkcraft-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# Real-file corpus tests (opt-in; `cargo xtask test-corpus`). Fail when the corpus is missing.
+corpus = []
+
+[dependencies]
+smurkcraft-geom = { workspace = true }
+smurkcraft-color = { workspace = true }
+smurkcraft-cms = { workspace = true }
+smurkcraft-raster = { workspace = true }
+smurkcraft-doc = { workspace = true }
+smurkcraft-ops = { workspace = true }
+smurkcraft-compose = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+rayon = { workspace = true }
+smurkcraft-paint = { workspace = true }
+smurkcraft-algo = { workspace = true }
+smurkcraft-text = { workspace = true }
+smurkcraft-vector = { workspace = true }
+smurkcraft-io = { workspace = true }
+smurkcraft-psd = { workspace = true }
+smurkcraft-format = { workspace = true }
+smurkcraft-plugins = { workspace = true }
+blake3 = { version = "1.8", default-features = false, features = ["pure"] }
+smurkcraft-codecs = { workspace = true }
+flate2 = { workspace = true }
+# Photoshop `.kys` shortcut sets (`edit.keyboardShortcuts` `importKys`); already in the tree
+# through smurkcraft-ui-egui and usvg.
+roxmltree = "0.20"
+
+[dev-dependencies]
+smurkcraft-affinity = { workspace = true, features = ["synth"] }
+# Synthetic camera raw files for the open tests.
+smurkcraft-raw = { workspace = true, features = ["testgen"] }
+# WebAssembly text -> binary for plug-in test modules (Apache-2.0 WITH LLVM-exception).
+wat = "1.228"
+# Synthetic multi-part EXR fixtures for the parts-commands tests.
+exr = { version = "1.73", default-features = false }

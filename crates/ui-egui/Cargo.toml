@@ -1,0 +1,59 @@
+[package]
+name = "smurkcraft-ui-egui"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+craft-ui = { workspace = true }
+smurkcraft-geom = { workspace = true }
+smurkcraft-color = { workspace = true }
+smurkcraft-cms = { workspace = true }
+smurkcraft-raster = { workspace = true }
+smurkcraft-doc = { workspace = true }
+smurkcraft-compose = { workspace = true }
+smurkcraft-gpu = { workspace = true }
+smurkcraft-engine = { workspace = true }
+smurkcraft-io = { workspace = true }
+smurkcraft-plugins = { workspace = true }
+smurkcraft-algo = { workspace = true }
+smurkcraft-text = { workspace = true }
+smurkcraft-vector = { workspace = true }
+# Only MAX_BRUSH_SIZE: `ui.set brushSize` validates against the Brush Settings range up front.
+smurkcraft-paint = { workspace = true }
+# Reading files to open them (bounded reads, a clear error for files larger than memory).
+smurkcraft-format = { workspace = true }
+# Decoding the brand mark's PNG (`brand.rs`); already linked through smurkcraft-io.
+smurkcraft-codecs = { workspace = true }
+egui = { workspace = true }
+egui_extras = { version = "0.36", default-features = false, features = ["svg"] }
+eframe = { workspace = true, features = ["default_fonts", "wgpu", "accesskit"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+log = { workspace = true }
+base64 = "0.22"
+# Inflating the translation catalogs, stored deflated (build.rs); already linked through smurkcraft-io.
+flate2 = { workspace = true }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+rayon = { workspace = true }
+# Safe native UI-language APIs (Windows/macOS); no subprocess or web dependency.
+sys-locale = "=0.3.2"
+
+[dev-dependencies]
+# Synthetic raw files for the open-time Camera Raw dialog tests.
+smurkcraft-raw = { workspace = true, features = ["testgen"] }
+egui_kittest = { workspace = true, features = ["wgpu", "snapshot", "eframe"] }
+# Benchmark helpers for the `--json` benches `cargo xtask perf` runs (in-process RSS, percentiles).
+smurkcraft-testkit = { workspace = true }
+# Only for examples/perf_scenarios.rs (a 500-brush .abr for the #210 import row).
+smurkcraft-psd = { workspace = true }
+
+[build-dependencies]
+# Deflates the translation catalogs (build.rs); already linked at run time to inflate them.
+flate2 = { workspace = true }
+serde_json = { workspace = true }
+toml = "1"

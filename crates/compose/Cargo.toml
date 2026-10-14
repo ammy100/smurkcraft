@@ -1,0 +1,27 @@
+[package]
+name = "smurkcraft-compose"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+smurkcraft-geom = { workspace = true }
+smurkcraft-color = { workspace = true }
+smurkcraft-raster = { workspace = true }
+smurkcraft-doc = { workspace = true }
+smurkcraft-vector = { workspace = true }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+rayon = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+criterion = { workspace = true }
+smurkcraft-paint = { workspace = true }
+
+[[bench]]
+name = "compose"
+harness = false
